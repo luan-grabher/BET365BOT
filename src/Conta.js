@@ -18,7 +18,7 @@ const Conta = {
                             Wait.element(selectors.login_BtnModal, 2000)
                                     .then((login_BtnModal) => {
                                         login_BtnModal.click();
-                                        //return fezLogin();
+                                        return fezLogin();
                                     });
                         });
                     });
