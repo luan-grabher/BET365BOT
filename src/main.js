@@ -1,3 +1,5 @@
+/* global Wait, Config, Conta, Evento, JSHelper */
+
 function tableStyle() {
     var style = document.createElement('style');
     style.type = 'text/css';
@@ -47,7 +49,8 @@ function tabelarEvento(data, status, tempoTotal, tempo, timeApostado, timeVs, ch
     tds += table.td(timeApostado.gols - timeVs.gols);
     tds += table.td(golsFinalApostado + " X " + golsFinalVS);
     return table.tr(tds);
-};
+}
+;
 
 const btnAposta = {
     clickFinalizar: function (apostaObj) {
@@ -380,12 +383,15 @@ function resultados() {
 
 console.log("Script Iniciado!");
 
+Wait.element(selectors.competitions, 10000)
+    .then((competitions) => {
+        //A cada 2 segundos executa tudo
+    });
+
 //Espera o site mostrar as competições, se tiver as competições inicia script de aposta
 waitForElementToDisplay(
         selectors.competitions,
         function () {
-            //Insere no head
-            addOnHead(tableStyle());
 
             //Repete infinitamente a cada 2 segundos
             setInterval(function () {

@@ -1,4 +1,5 @@
 var Wait = {
+    waiting: [],
     sleep: function (ms) {
         /*chamar função com await ou 'sleep(1000).then(()=>{CODIGO});' */
         return new Promise(resolve => setTimeout(resolve, ms));
