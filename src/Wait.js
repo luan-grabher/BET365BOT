@@ -1,4 +1,4 @@
-var Wait = {
+const Wait = {
     waiting: [],
     sleep: function (ms) {
         /*chamar função com await ou 'sleep(1000).then(()=>{CODIGO});' */
@@ -8,12 +8,29 @@ var Wait = {
         return new Promise((success, error) =>{
             var startTimeInMs = Date.now();
             (function loopSearch() {
-                if ($(selector) !== null) {
+                if ($(selector).length) {
                     return success($(selector));
                 } else {
                     Wait.sleep(1000).then(()=>{
                          if (timeoutInMs && Date.now() - startTimeInMs > timeoutInMs) {
                             return error("Elemento '" + selector + "' não encontrado.");
+                        }
+                        loopSearch();
+                    });
+                }
+            })();
+        });        
+    },
+    elementVal: function (selector, timeoutInMs) {
+        return new Promise((success, error) =>{
+            var startTimeInMs = Date.now();
+            (function loopSearch() {
+                if ($(selector).length && $(selector).val().length > 0) {
+                    return success($(selector));
+                } else {
+                    Wait.sleep(1000).then(()=>{
+                         if (timeoutInMs && Date.now() - startTimeInMs > timeoutInMs) {
+                            return error("Elemento '" + selector + "' não encontrado ou com valor em branco.");
                         }
                         loopSearch();
                     });

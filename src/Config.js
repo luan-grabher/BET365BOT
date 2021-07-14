@@ -30,6 +30,8 @@ const selectors = {
     saldo: ".hm-Balance",
     login_Btn: ".hm-MainHeaderRHSLoggedOutWide_LoginContainer",
     login_BtnModal: ".lms-StandardLogin_LoginButton",
+    login_User: ".lms-StandardLogin_Username",
+    login_Password: ".lms-StandardLogin_Password",
     verificacaoDeConta: "#remindLater",
     notificacaoIframe: ".lp-UserNotificationsPopup_Frame",
     caixaAposta: ".qbs-StakeBox",

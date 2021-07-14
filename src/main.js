@@ -31,7 +31,7 @@ const table = {
     },
     td: function (text) {
         return "<td>" + text + "</td>";
-    },
+    }
 };
 
 
@@ -382,7 +382,7 @@ const Main = new Promise((success, error) => {
     Wait.waiting["main"] =  true;
     
     //Login
-    Conta.login()
+    Conta.login
             .then(() => {
                 //NÃO FAZ NADA POIS A PAGE VAI RECARREGAR
                 console.log("Na teoria é para recarregar a página agora.");
@@ -401,9 +401,10 @@ const Main = new Promise((success, error) => {
 
 console.log("Script Iniciado!");
 
+//Espera até 10s pelas competições
 Wait.element(selectors.competitions, 10000)
         //Quando encontrar as competições
-        .then((competitions) => {
+        .then(() => {
             //A cada 2 segundos executa tudo
             setInterval(function () {
                 //console.clear();

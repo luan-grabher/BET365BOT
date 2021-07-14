@@ -13,12 +13,12 @@ const Evento = {
             ganhando = evento.times.dois.chance;
             perdendo = evento.times.um.chance;
 
-            difGols = evento.times.dois.gols - evento.times.um.gols
+            difGols = evento.times.dois.gols - evento.times.um.gols;
         } else {
             ganhando = evento.times.um.chance;
             perdendo = evento.times.dois.chance;
 
-            difGols = evento.times.um.gols - evento.times.dois.gols
+            difGols = evento.times.um.gols - evento.times.dois.gols;
         }
 
 

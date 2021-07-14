@@ -3,7 +3,7 @@
 const Conta = {
     getSaldo: function () {
         let divSaldo = $(selectors.saldo);
-        let saldo = divSaldo === null ? "R$0,00" : divSaldo.text();
+        let saldo = divSaldo.length ? "R$0,00" : divSaldo.text();
 
         return Number(saldo.replaceAll(/[^0-9,]*/gm, "").replaceAll(",", "."));
     },
@@ -13,11 +13,16 @@ const Conta = {
                 .then((login_Btn) => {
                     //Clica no botão de login
                     login_Btn.click();
-                    Wait.element(selectors.login_BtnModal, 10000)
-                            .then((login_BtnModal) => {
-                                login_BtnModal.click();
-                                return fezLogin();
-                            });
+                    Wait.sleep(3000).then(() => {
+                        Promise.all([Wait.element(selectors.login_User, 5000), Wait.element(selectors.login_Password, 5000)]).then(() => {
+                            Wait.element(selectors.login_BtnModal, 2000)
+                                    .then((login_BtnModal) => {
+                                        login_BtnModal.click();
+                                        //return fezLogin();
+                                    });
+                        });
+                    });
+
                 })
                 .catch(() => {
                     //Não tem botão de login
