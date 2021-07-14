@@ -13,7 +13,7 @@ var Wait = {
                 } else {
                     Wait.sleep(1000).then(()=>{
                          if (timeoutInMs && Date.now() - startTimeInMs > timeoutInMs) {
-                            return error("erro");
+                            return error("Elemento '" + selector + "' não encontrado.");
                         }
                         loopSearch();
                     });

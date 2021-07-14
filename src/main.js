@@ -1,4 +1,4 @@
-/* global Wait, Config, Conta, Evento, JSHelper */
+/* global Wait, Config, Conta, Evento, JSHelper, selectors */
 
 function tableStyle() {
     var style = document.createElement('style');
@@ -377,6 +377,22 @@ function resultados() {
     estatisticas.append(newHtml);
 }
 
+const Main = new Promise((success, error) => {
+    //Define que está esperando a função terminar
+    Wait.waiting["main"] =  true;
+    
+    //Login
+    Conta.login()
+            .then(() => {
+                //NÃO FAZ NADA POIS A PAGE VAI RECARREGAR
+            })
+            .catch(() => {
+                //CODIGO DA CONTINUAÇÃO AQUI
+                //apostar();
+                //resultados();
+            });
+});
+
 /* *************
  * INICIO DE TUDO
  * **************/
@@ -384,27 +400,18 @@ function resultados() {
 console.log("Script Iniciado!");
 
 Wait.element(selectors.competitions, 10000)
-    .then((competitions) => {
-        //A cada 2 segundos executa tudo
-    });
-
-//Espera o site mostrar as competições, se tiver as competições inicia script de aposta
-waitForElementToDisplay(
-        selectors.competitions,
-        function () {
-
-            //Repete infinitamente a cada 2 segundos
+        //Quando encontrar as competições
+        .then((competitions) => {
+            //A cada 2 segundos executa tudo
             setInterval(function () {
                 //console.clear();
-
-                conta.login()
-                apostar();
-                resultados();
-
-                //Mostra times que está apostando para mostrar que ta funcionando
-                console.log(apostando);
+                if (!Wait.waiting["main"]) {
+                    Main()
+                            //Terminou a função
+                            .then(() => {
+                                //Para de esperar a função main
+                                Wait.waiting["main"] =  false;
+                            });
+                }
             }, 2000)
-        },
-        1000,
-        15000
-        );
+        });
