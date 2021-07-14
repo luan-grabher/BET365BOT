@@ -29,41 +29,8 @@ const Apostas = {
 
         return false;
     },
-    adicionarEvento: (evento, chancesDOM)=>{
-        return new Promise((success,error)=>{
-            
-        });
-    },
-    atualizarEvento: (evento)=>{
-        return new Promise((success,error)=>{
-            
-        });
-    },
-    adicionarOuAtualizar: function (aposta, chancesInputs) {
-        if (aposta !== null && aposta !== undefined) {
-            //Pega apostas já feitas
-            var save = apostas.getAll();
-            var exists = false;
-            //Percorre apostas já feitas para atualizar caso já exista
-            for (var i = 0; i < save.length; i++) {
-                var ap = save[i];
-                if (
-                        ap.data === aposta.data &&
-                        ap.times.um.nome === aposta.times.um.nome &&
-                        ap.times.dois.nome === aposta.times.dois.nome) {
-
-                    // é a mesma aposta, então só atualiza					
-                    ap.ultimoPlacar.tempo = aposta.tempo;
-                    ap.ultimoPlacar.time1 = aposta.times.um.gols;
-                    ap.ultimoPlacar.time2 = aposta.times.dois.gols;
-                    ap.ultimoPlacar.att = getMinutes();
-                    save[i] = ap;
-                    exists = true;
-                    apostas.salvar(save);
-                    return false;
-                }
-            }
-
+    adicionarEvento: (evento, chancesDOM) => {
+        return new Promise((success, error) => {
             //Se não existir e não estiver apostando
             if (!exists && !apostando.includes(aposta.times.um.nome + aposta.times.dois.nome)) {
 
@@ -76,12 +43,39 @@ const Apostas = {
                     return btnAposta.apostar(chancesInputs[2], aposta);
                 }
             }
-        }
+        });
+    },
+    atualizarEvento: (evento) => {
+        return new Promise((success, error) => {
+            //Pega apostas já feitas
+            var apostasFeitas = Apostas.todas();
+
+            //Percorre apostas
+            apostasFeitas.forEach((ap, i) => {
+                if (
+                        ap.data === evento.data &&
+                        ap.times.um.nome === evento.times.um.nome &&
+                        ap.times.dois.nome === evento.times.dois.nome) {
+
+                    //Atualiza placar				
+                    ap.ultimoPlacar.tempo = evento.tempo;
+                    ap.ultimoPlacar.time1 = evento.times.um.gols;
+                    ap.ultimoPlacar.time2 = evento.times.dois.gols;
+                    ap.ultimoPlacar.att = getMinutes();
+                    
+                    //Atualiza o objeto
+                    apostasFeitas[i] = ap;
+                    
+                    Apostas.salvar(apostasFeitas);
+                    return success();
+                }
+            });
+        });
     },
     validarEventos: (competitions) => {
         return new Promise((success, error) => {
             var promises = [];
-            
+
             //Percorre todas competições
             competitions.each((i, competition) => {
                 competition = $(competition); //Converte para jquery
@@ -129,8 +123,8 @@ const Apostas = {
                     }
                 });
             });
-            
-            Promise.all(promises).then(()=>{
+
+            Promise.all(promises).then(() => {
                 return success();
             });
         });
