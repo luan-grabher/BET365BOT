@@ -21,10 +21,10 @@ const selectors = {
     competitions: ".ovm-Competition.ovm-Competition-open",
     competition_name: ".ovm-CompetitionHeader_Name",
     competition_events: ".ovm-Fixture.ovm-Fixture-horizontal.ovm-Fixture-media",
-    times: ".ovm-FixtureDetailsTwoWay_TeamName",
-    tempo: ".ovm-InPlayTimer",
-    gols: ".ovm-StandardScores_ScoresWrapper div",
-    chances: ".ovm-ParticipantOddsOnly_Odds",
+    evento_tempo:".ovm-InPlayTimer",
+    evento_times: ".ovm-FixtureDetailsTwoWay_TeamName",
+    evento_times_gols: ".ovm-StandardScores_ScoresWrapper div",
+    evento_times_chances: ".ovm-ParticipantOddsOnly_Odds",
     mainLiveList: ".ovm-OverviewView_Classification",
     stakeBox: ".qbs-StakeBox_Wrapper",
     saldo: ".hm-Balance",
@@ -44,5 +44,5 @@ const selectors = {
     valoresApostasAtuais: ".myb-OpenBetItemInnerView_BetInformationContainer",
     lucroEsperado: ".myb-OpenBetItemInnerView_BetInformationText",
     lucroParaFinalizar: ".myb-CloseBetButtonBase_Return"
-}
+};
 

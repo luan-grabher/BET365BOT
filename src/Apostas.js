@@ -1,45 +1,52 @@
+/* global selectors, Evento, Promise */
+
 const Apostas = {
-    getAll: function () {
+    todas: () => {
         return JSON.parse(localStorage.getItem("apostas")) || [];
     },
-    salvar: function (saved) {
+    salvar: (apostasSalvas) => {
         //Atualiza no local storage as apostas
-        localStorage.setItem("apostas", JSON.stringify(saved));
+        localStorage.setItem("apostas", JSON.stringify(apostasSalvas));
     },
-    adicionar: function (aposta) {
-        var saved = apostas.getAll();
-        saved.push(aposta);
-        apostas.salvar(saved);
+    adicionar: (evento) => {
+        var saved = Apostas.todas();
+        saved.push(evento);
+        Apostas.salvar(saved);
     },
-    exist: function (aposta) {
-        var find = false;
-
-        var save = apostas.getAll();
-
+    existe: (evento) => {
+        var save = Apostas.todas();
         //Procura a aposta
         for (var i = 0; i < save.length; i++) {
             var ap = save[i];
             if (
-                    ap.data === aposta.data &&
-                    ap.times.um.nome === aposta.times.um.nome &&
-                    ap.times.dois.nome === aposta.times.dois.nome) {
+                    ap.data === evento.data &&
+                    ap.times.um.nome === evento.times.um.nome &&
+                    ap.times.dois.nome === evento.times.dois.nome) {
                 //encontrou a aposta e define como o encontrado
-                find = true;
+                return true;
             }
         }
 
-        return find
+        return false;
+    },
+    adicionarEvento: (evento, chancesDOM)=>{
+        return new Promise((success,error)=>{
+            
+        });
+    },
+    atualizarEvento: (evento)=>{
+        return new Promise((success,error)=>{
+            
+        });
     },
     adicionarOuAtualizar: function (aposta, chancesInputs) {
         if (aposta !== null && aposta !== undefined) {
             //Pega apostas já feitas
             var save = apostas.getAll();
             var exists = false;
-
             //Percorre apostas já feitas para atualizar caso já exista
             for (var i = 0; i < save.length; i++) {
                 var ap = save[i];
-
                 if (
                         ap.data === aposta.data &&
                         ap.times.um.nome === aposta.times.um.nome &&
@@ -51,7 +58,6 @@ const Apostas = {
                     ap.ultimoPlacar.time2 = aposta.times.dois.gols;
                     ap.ultimoPlacar.att = getMinutes();
                     save[i] = ap;
-
                     exists = true;
                     apostas.salvar(save);
                     return false;
@@ -72,69 +78,61 @@ const Apostas = {
             }
         }
     },
-    validarEventos = (competitions) => {
-        //Percorre todas competições
-        for (var c = 0; c < competicoes.length; c++) {
-            //Pega competição
-            let competition = competicoes[c];
+    validarEventos: (competitions) => {
+        return new Promise((success, error) => {
+            var promises = [];
+            
+            //Percorre todas competições
+            competitions.each((i, competition) => {
+                competition = $(competition); //Converte para jquery
+                var competicao_nome = competition.find(selectors.competition_name).text();
+                var eventos = competition.find(selectors.competition_events);
 
-            //Pega nome
-            let competition_name = competition.querySelector(selectors.competition_name).innerText;
+                //Percorre eventos
+                eventos.each((e, evento_DOM) => {
+                    evento_DOM = $(evento_DOM); //Jquery
+                    var tempo = evento_DOM.find(selectors.evento_tempo);
+                    if (tempo.length) {
+                        tempo = Number(tempo.text().replaceAll(":", ".")); //Converte tempo para numero
 
-            //Pega elementos DOM dos eventos
-            var competition_events = document.querySelectorAll(selectors.competition_events);
+                        var times = evento_DOM.find(selectors.evento_times);
+                        var gols = evento_DOM.find(selectors.evento_times_gols);
+                        var chancesDOM = evento_DOM.find(selectors.evento_times_chances);
 
-            //Percorre todos DOM
-            for (var i = 0; i < competition_events.length; i++) {
-                //Grava em váriavel temporaria o DOM
-                var competition_event = competition_events[i];
-
-                var tempo = competition_event.querySelector(selectors.tempo);
-                if (tempo !== null) {
-                    tempo = tempo.innerText.split(":")[0];
-                    var times = competition_event.querySelectorAll(selectors.times);
-                    var gols = competition_event.querySelectorAll(selectors.gols);
-
-                    //Pega as chances
-                    var chances = competition_event.querySelectorAll(selectors.chances);
-                    //Se não concontrar 3 chances, faz uma lista pra abaixo quando setar não der B.O.
-                    if (chances.length !== 3) {
-                        chances = {
-                            time1: 0,
-                            time2: 0,
-                            empate: 0
+                        var chances = {
+                            um: chances.length === 3 ? chances[0] : 0,
+                            dois: chances.length === 3 ? chances[2] : 0,
+                            empate: chances.length === 3 ? chances[1] : 0
                         };
-                    } else {
-                        chances = {
-                            time1: Number(chances[0].innerText),
-                            time2: Number(chances[2].innerText),
-                            empate: Number(chances[1].innerText)
-                        };
-                    }
 
-                    //Cria objeto
-                    var evento = EVENT(
-                            tempo, //tempo
-                            competition_name,
-                            times[0].innerText, //Nome time 1
-                            times[1].innerText, //Nome time 2
-                            Number(gols[0].innerText), //Gols time 1
-                            Number(gols[1].innerText), //Gols time 2
-                            chances.time1, //Chance Time 1
-                            chances.time2, //Chance Time 2
-                            chances.empate//Chance Empate
-                            );
+                        //Cria objeto
+                        var evento = Evento.obj(
+                                tempo, //tempo
+                                competicao_nome,
+                                times[0].text(), //Nome time 1
+                                times[1].text(), //Nome time 2
+                                Number(gols[0].text()), //Gols time 1
+                                Number(gols[1].text()), //Gols time 2
+                                chances.um, //Chance Time 1
+                                chances.dois, //Chance Time 2
+                                chances.empate//Chance Empate
+                                );
 
-                    if (
-                            apostas.exist(evento) || //Se o evento já existir OU
-                            (chances.time1 !== 0 && //Existir as 3 chances
-                                    validarEvento(evento, filtrosAdd)
-                                    )
-                            ) {
-                        apostas.adicionarOuAtualizar(evento, competition_event.querySelectorAll(selectors.chances));
+                        //Se  já existir nas apostas feitas
+                        if (Apostas.existe(evento)) {
+                            //Atualiza a aposta
+                            promises.push(Apostas.atualizarEvento(evento));
+                        } else if (chances.um > 0 && Evento.validar(evento)) {
+                            //Tenta realizar a aposta
+                            promises.push(Apostas.adicionarEvento(evento, chancesDOM));
+                        }
                     }
-                }
-            }
-        }
+                });
+            });
+            
+            Promise.all(promises).then(()=>{
+                return success();
+            });
+        });
     }
 };

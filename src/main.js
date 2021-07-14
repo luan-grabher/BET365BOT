@@ -1,4 +1,4 @@
-/* global Wait, Config, Conta, Evento, JSHelper, selectors, apostando, conta, cfg */
+/* global Wait, Config, Conta, Evento, JSHelper, selectors, apostando, conta, cfg, Apostas */
 
 function tableStyle() {
     var style = document.createElement('style');
@@ -322,7 +322,10 @@ const Main = function (competitions) {
                 })
                 .catch(() => {
                     //CODIGO DA CONTINUAÇÃO AQUI                
-                    //apostar();
+                    Apostas.validarEventos(competitions)
+                            .then(() => {
+                                success();
+                            });
                     //resultados();
                 });
     });
@@ -332,6 +335,7 @@ const Main = function (competitions) {
  * INICIO DE TUDO
  * **************/
 
+console.clear();
 console.log("Script Iniciado!");
 
 //Espera até 10s pelas competições
@@ -342,7 +346,7 @@ Wait.element(selectors.competitions, 10000)
             setInterval(function () {
                 //console.clear();
                 if (!Wait.waiting["main"]) {
-                    Main()
+                    Main(competitions)
                             //Terminou a função
                             .then(() => {
                                 //Para de esperar a função main
