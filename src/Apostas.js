@@ -1,4 +1,4 @@
-/* global selectors, Evento, Promise */
+/* global selectors, Evento, Promise, Conta, cfg, apostando, Wait */
 
 const Apostas = {
     todas: () => {
@@ -29,20 +29,86 @@ const Apostas = {
 
         return false;
     },
-    adicionarEvento: (evento, chancesDOM) => {
+    apostar: (evento, chanceDOM) => {
         return new Promise((success, error) => {
-            //Se não existir e não estiver apostando
-            if (!exists && !apostando.includes(aposta.times.um.nome + aposta.times.dois.nome)) {
+            let clickFinalizar = (apostaObj) => {
+                if (document.querySelector(selectors.btnFinalizar) !== null) {
+                    document.querySelector(selectors.btnFinalizar).click();
+                    apostas.adicionar(apostaObj);
+                    removeArrayItem(apostando, apostaObj.times.um.nome + apostaObj.times.dois.nome);
+                    console.log(apostaObj);
+                } else if (document.querySelector(selectors.btnAceitar) !== null ||
+                        document.querySelector(selectors.btnAceitarMudanca) !== null) {
+                    clickIfNotNull(selectors.btnAceitar);
+                    clickIfNotNull(selectors.btnAceitarMudanca);
 
-                //Coloca em quem ta apostando
-                if (aposta.times.um.chance < aposta.times.dois.chance) {
-                    aposta.apostado = aposta.times.um.nome;
-                    return btnAposta.apostar(chancesInputs[0], aposta);
-                } else {
-                    aposta.apostado = aposta.times.dois.nome;
-                    return btnAposta.apostar(chancesInputs[2], aposta);
+                    setTimeout(function () {
+                        btnAposta.clickFinalizar(apostaObj)
+                    }, 1000);
                 }
             }
+
+            var times = evento.times.um.nome + evento.times.dois.nome; //Usado para 'apostando'
+
+            //Se tiver saldo para apostar, aposta não existir e não estiver apostando
+            if (Conta.saldo() >= cfg.valorAposta && !Apostas.existe(evento) && !apostando.includes(times)) {
+                //Define que está apostando nos times pra nao apostar 2 vezes
+                apostando.push(times);
+
+                //Muda o backgournd para vermelho para visualmente poder enchergar
+                chanceDOM.css("background-color", "red");
+
+                Wait.elementNonExist(selectors.apostar_div, 20000)
+                        .then(() => {
+                            //Clica na chance para apostar
+                            chanceDOM.click();
+
+                            //Espera a caixa de aposta aparecer até 5 Seg
+                            Wait.element(selectors.apostar_div, 5000)
+                                    .then((apostar_div) => {
+                                        //Espera botão de aposta estar disponivel
+                                        //Clica no botão de aposta
+                                        //Se aparecer outro botão de aposta clica em apostar e espera aparecer o finalizar para clicar no finalizar
+                                        //Se aparecer Finalizar, clica em finalizar
+                                        //Se aparecer que não está mais disponível, clica em delete
+                                        
+                                        waitForElementsToDisplay(
+                                                [selectors.btnAceitar, selectors.btnAceitarMudanca],
+                                                function () {
+                                                    btnAposta.clickFinalizar(apostaObj)
+                                                }
+                                        ,
+                                                1000,
+                                                5000
+                                                )
+                                    });
+                        })
+                        .catch(() => {
+                            return success();
+                        });
+            } else {
+                return success();
+            }
+
+        });
+    },
+    adicionarEvento: (evento, chancesDOM) => {
+        return new Promise((success, error) => {
+            //Coloca em quem ta apostando
+            if (evento.times.um.chance < evento.times.dois.chance) {
+                evento.apostado = evento.times.um.nome;
+                Apostas.apostar(evento, chancesDOM[0]).then(() => {
+                    //Quando tiver apostado retorna sucesso
+                    return success();
+                });
+            } else {
+                evento.apostado = evento.times.dois.nome;
+                Apostas.apostar(evento, chancesDOM[2]).then(() => {
+                    //Quando tiver apostado retorna sucesso
+                    return success();
+                });
+            }
+
         });
     },
     atualizarEvento: (evento) => {
@@ -62,10 +128,10 @@ const Apostas = {
                     ap.ultimoPlacar.time1 = evento.times.um.gols;
                     ap.ultimoPlacar.time2 = evento.times.dois.gols;
                     ap.ultimoPlacar.att = getMinutes();
-                    
+
                     //Atualiza o objeto
                     apostasFeitas[i] = ap;
-                    
+
                     Apostas.salvar(apostasFeitas);
                     return success();
                 }

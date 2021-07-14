@@ -1,7 +1,7 @@
 /* global selectors */
 
 const Conta = {
-    getSaldo: function () {
+    saldo: () => {
         let divSaldo = $(selectors.saldo);
         let saldo = divSaldo.length ? "R$0,00" : divSaldo.text();
 

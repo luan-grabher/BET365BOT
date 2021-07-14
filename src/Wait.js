@@ -21,6 +21,23 @@ const Wait = {
             })();
         });        
     },
+    elementNonExist: function (selector, timeoutInMs) {
+        return new Promise((success, error) =>{
+            var startTimeInMs = Date.now();
+            (function loopSearch() {
+                if (!$(selector).length) {
+                    return success();
+                } else {
+                    Wait.sleep(1000).then(()=>{
+                         if (timeoutInMs && Date.now() - startTimeInMs > timeoutInMs) {
+                            return error("Elemento '" + selector + "' não desapareceu.");
+                        }
+                        loopSearch();
+                    });
+                }
+            })();
+        });        
+    },
     elementVal: function (selector, timeoutInMs) {
         return new Promise((success, error) =>{
             var startTimeInMs = Date.now();
