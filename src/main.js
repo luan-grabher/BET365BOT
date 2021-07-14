@@ -1,4 +1,4 @@
-/* global Wait, Config, Conta, Evento, JSHelper, selectors */
+/* global Wait, Config, Conta, Evento, JSHelper, selectors, apostando, conta, cfg */
 
 function tableStyle() {
     var style = document.createElement('style');
@@ -51,7 +51,7 @@ function tabelarEvento(data, status, tempoTotal, tempo, timeApostado, timeVs, ch
     return table.tr(tds);
 }
 ;
-
+/*
 const btnAposta = {
     clickFinalizar: function (apostaObj) {
         if (document.querySelector(selectors.btnFinalizar) !== null) {
@@ -285,7 +285,7 @@ function resultados() {
     newHtml.style.color = "black";
     newHtml.style.padding = "5%";
 
-    /*Pega as apostas*/
+    //Pega apostas
     let resultados = apostas.getAll();
 
     let totals = {
@@ -375,7 +375,7 @@ function resultados() {
 
     estatisticas.innerHTML = "";
     estatisticas.append(newHtml);
-}
+}*/
 
 const Main = new Promise((success, error) => {
     //Define que está esperando a função terminar
@@ -385,9 +385,11 @@ const Main = new Promise((success, error) => {
     Conta.login()
             .then(() => {
                 //NÃO FAZ NADA POIS A PAGE VAI RECARREGAR
+                console.log("Na teoria é para recarregar a página agora.");
             })
             .catch(() => {
                 //CODIGO DA CONTINUAÇÃO AQUI
+                console.log("Codigo rodando normalmente, já está logado.");
                 //apostar();
                 //resultados();
             });
