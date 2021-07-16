@@ -31,19 +31,19 @@ const Apostas = {
     },
     apostar: (evento, chanceDOM) => {
         return new Promise((success, error) => {
-            let clickFinalizar = (apostaObj) => {
+            let clickFinalizar = () => {
                 if (document.querySelector(selectors.btnFinalizar) !== null) {
                     document.querySelector(selectors.btnFinalizar).click();
-                    apostas.adicionar(apostaObj);
-                    removeArrayItem(apostando, apostaObj.times.um.nome + apostaObj.times.dois.nome);
-                    console.log(apostaObj);
+                    apostas.adicionar(evento);
+                    removeArrayItem(apostando, evento.times.um.nome + evento.times.dois.nome);
+                    console.log(evento);
                 } else if (document.querySelector(selectors.btnAceitar) !== null ||
                         document.querySelector(selectors.btnAceitarMudanca) !== null) {
                     clickIfNotNull(selectors.btnAceitar);
                     clickIfNotNull(selectors.btnAceitarMudanca);
 
                     setTimeout(function () {
-                        btnAposta.clickFinalizar(apostaObj)
+                        clickFinalizar()
                     }, 1000);
                 }
             }
@@ -67,20 +67,18 @@ const Apostas = {
                             Wait.element(selectors.apostar_div, 5000)
                                     .then((apostar_div) => {
                                         //Espera botão de aposta estar disponivel
-                                        //Clica no botão de aposta
-                                        //Se aparecer outro botão de aposta clica em apostar e espera aparecer o finalizar para clicar no finalizar
-                                        //Se aparecer Finalizar, clica em finalizar
-                                        //Se aparecer que não está mais disponível, clica em delete
-                                        
-                                        waitForElementsToDisplay(
-                                                [selectors.btnAceitar, selectors.btnAceitarMudanca],
-                                                function () {
-                                                    btnAposta.clickFinalizar(apostaObj)
-                                                }
-                                        ,
-                                                1000,
-                                                5000
-                                                )
+                                        Wait.element(selectors.apostar_btn)
+                                                .then((apostar_btn) => {
+                                                    //Clica no botão de aposta
+                                                    apostar_btn.click();
+                                                    //Se aparecer outro botão de aposta clica em apostar e espera aparecer o finalizar para clicar no finalizar
+                                                    Wait.element()
+                                                    //Se aparecer Finalizar, clica em finalizar
+                                                    //Se aparecer que não está mais disponível, clica em delete
+                                                })
+                                                .catch(() => {
+                                                    return success();
+                                                });
                                     });
                         })
                         .catch(() => {

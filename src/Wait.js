@@ -1,10 +1,10 @@
 const Wait = {
     waiting: [],
-    sleep: function (ms) {
+    sleep: function (ms = 1000) {
         /*chamar função com await ou 'sleep(1000).then(()=>{CODIGO});' */
         return new Promise(resolve => setTimeout(resolve, ms));
     },
-    element: function (selector, timeoutInMs) {
+    element: function (selector, timeoutInMs = 5000) {
         return new Promise((success, error) =>{
             var startTimeInMs = Date.now();
             (function loopSearch() {
@@ -21,7 +21,7 @@ const Wait = {
             })();
         });        
     },
-    elementNonExist: function (selector, timeoutInMs) {
+    elementNonExist: function (selector, timeoutInMs = 5000) {
         return new Promise((success, error) =>{
             var startTimeInMs = Date.now();
             (function loopSearch() {
@@ -38,7 +38,7 @@ const Wait = {
             })();
         });        
     },
-    elementVal: function (selector, timeoutInMs) {
+    elementVal: function (selector, timeoutInMs = 5000) {
         return new Promise((success, error) =>{
             var startTimeInMs = Date.now();
             (function loopSearch() {
