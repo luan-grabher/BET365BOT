@@ -178,9 +178,9 @@ const Apostas = {
                         var chancesDOM = evento_DOM.find(selectors.evento_times_chances);
 
                         var chances = {
-                            um: chances.length === 3 ? chances[0] : 0,
-                            dois: chances.length === 3 ? chances[2] : 0,
-                            empate: chances.length === 3 ? chances[1] : 0
+                            um: chancesDOM.length === 3 ? chancesDOM[0] : 0,
+                            dois: chancesDOM.length === 3 ? chancesDOM[2] : 0,
+                            empate: chancesDOM.length === 3 ? chancesDOM[1] : 0
                         };
 
                         //Cria objeto
