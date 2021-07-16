@@ -31,23 +31,6 @@ const Apostas = {
     },
     apostar: (evento, chanceDOM) => {
         return new Promise((success, error) => {
-            let clickFinalizar = () => {
-                if (document.querySelector(selectors.btnFinalizar) !== null) {
-                    document.querySelector(selectors.btnFinalizar).click();
-                    apostas.adicionar(evento);
-                    removeArrayItem(apostando, evento.times.um.nome + evento.times.dois.nome);
-                    console.log(evento);
-                } else if (document.querySelector(selectors.btnAceitar) !== null ||
-                        document.querySelector(selectors.btnAceitarMudanca) !== null) {
-                    clickIfNotNull(selectors.btnAceitar);
-                    clickIfNotNull(selectors.btnAceitarMudanca);
-
-                    setTimeout(function () {
-                        clickFinalizar()
-                    }, 1000);
-                }
-            }
-
             var times = evento.times.um.nome + evento.times.dois.nome; //Usado para 'apostando'
 
             //Se tiver saldo para apostar, aposta não existir e não estiver apostando
@@ -64,20 +47,57 @@ const Apostas = {
                             chanceDOM.click();
 
                             //Espera a caixa de aposta aparecer até 5 Seg
-                            Wait.element(selectors.apostar_div, 5000)
+                            Wait.element(selectors.apostar_div)
                                     .then((apostar_div) => {
+                                        let esperarBtnCancelar = () => {
+                                            return  Wait.element(selectors.apostar_cancelar)
+                                                    .then((apostar_cancelar) => {
+                                                        apostar_cancelar.click();
+                                                        return success();
+                                                    })
+                                                    .catch(() => {
+                                                        //Não apareceu o btn de cancelar, desiste de tudo, não sei o que ta acontecendo
+                                                        console.log("Mano, não achei o botao de aposta depois de abrir a caixa de aposta e tbm não achei o botao de cancelar, ve o que houve ai");
+                                                        return success();
+                                                    });
+                                        };
+
+                                        let esperarBtnFinalizar = () => {
+                                            return Wait.element(selectors.apostar_btnFinalizar, 10000)
+                                                    .then((btnFinalizar) => {
+                                                        btnFinalizar.click();
+                                                        Apostas.adicionar(evento);
+                                                        removeArrayItem(apostando, evento.times.um.nome + evento.times.dois.nome);
+                                                        console.log(evento);
+
+                                                        return success();
+                                                    })
+                                                    .catch(() => {
+                                                        //
+                                                        return esperarBtnCancelar();
+                                                    });
+                                        };
+
                                         //Espera botão de aposta estar disponivel
                                         Wait.element(selectors.apostar_btn)
                                                 .then((apostar_btn) => {
                                                     //Clica no botão de aposta
                                                     apostar_btn.click();
                                                     //Se aparecer outro botão de aposta clica em apostar e espera aparecer o finalizar para clicar no finalizar
-                                                    Wait.element()
-                                                    //Se aparecer Finalizar, clica em finalizar
-                                                    //Se aparecer que não está mais disponível, clica em delete
+                                                    Wait.element(selectors.apostar_div, 10000)
+                                                            .then((apostar_btn2) => {
+                                                                apostar_btn2.click();
+                                                                //Finaliza
+                                                                return esperarBtnFinalizar();
+                                                            })
+                                                            .catch(() => {
+                                                                //Não apareceu o segundo botão, então espera aparecer o finalizar
+                                                                return esperarBtnFinalizar();
+                                                            });
                                                 })
                                                 .catch(() => {
-                                                    return success();
+                                                    //Não achou o btn de aposta, então cancela
+                                                    return esperarBtnCancelar();
                                                 });
                                     });
                         })
