@@ -289,5 +289,5 @@ Wait.element(selectors.competitions, 10000)
                                 Wait.waiting["main"] = false;
                             });
                 }
-            }, 2000)
+            }, 2000);
         });

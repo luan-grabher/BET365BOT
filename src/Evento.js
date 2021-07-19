@@ -24,6 +24,8 @@ const Evento = {
             for (var f = 0; f < filtros.length; f++) {
                 let filtro = filtros[f];
 
+                
+
                 //empate, perdendo, ganhandoMaiorQue, difGols
                 if (
                         (filtro.tempoTotal === null || filtro.tempoTotal === evento.tempoTotal) &&
@@ -35,6 +37,8 @@ const Evento = {
                         (filtro.difGols === null || difGols >= filtro.difGols) &&
                         (filtro.temNoNome === null || (evento.times.um.nome.includes(filtro.temNoNome) && evento.times.dois.nome.includes(filtro.temNoNome)))
                         ) {
+                    debug(filtro, true);
+                    
                     return success();
                 }
             }

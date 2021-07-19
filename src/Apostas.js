@@ -247,9 +247,20 @@ const Apostas = {
                         if (Apostas.existe(evento)) {
                             //Atualiza a aposta
                             promises.push(Apostas.atualizarEvento(evento));
-                        } else if (chances.um > 0 && Evento.validar(evento, filtros.add)) {
-                            //Tenta realizar a aposta
-                            promises.push(Apostas.adicionarEvento(evento, chancesDOM));
+                        } else if (chances.um > 0) {
+                            Evento.validar(evento, filtros.add)
+                                    .then(() => {
+                                        debug(
+                                                "Evento valido: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                                                " - T " + tempo +
+                                                " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
+                                                , true);
+                                        //Tenta realizar a aposta
+                                        promises.push(Apostas.adicionarEvento(evento, chancesDOM));
+                                    })
+                                    .catch(() => {
+                                        //Não afz nada, o evento é invalido
+                                    });
                         }
                     }
                 });

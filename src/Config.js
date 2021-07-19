@@ -18,17 +18,17 @@ const filtros = {
 };
 
 //Para desativar o debug troque o 'mostrar' pata false, entao somente quem passar o mostrar como true vai mostrar
-const debug = (msg, mostrar = true)=>{    
-    if(mostrar){
+const debug = (msg, mostrar = false) => {
+    if (mostrar) {
         console.log(msg);
-    }
+}
 };
 
 const selectors = {
     competitions: ".ovm-Competition.ovm-Competition-open",
     competition_name: ".ovm-CompetitionHeader_Name",
     competition_events: ".ovm-Fixture.ovm-Fixture-horizontal.ovm-Fixture-media",
-    evento_tempo:".ovm-InPlayTimer",
+    evento_tempo: ".ovm-InPlayTimer",
     evento_times: ".ovm-FixtureDetailsTwoWay_TeamName",
     evento_times_gols: ".ovm-StandardScores_ScoresWrapper div",
     evento_times_chances: ".ovm-ParticipantOddsOnly_Odds",
@@ -43,7 +43,7 @@ const selectors = {
     apostar_btn: ".qbs-BetPlacement > div",
     apostar_cancelar: ".bs-DeleteButton",
     apostar_btnFinalizar: ".qbs-QuickBetHeader_DoneButton",
-    header:".hm-HeaderModule",
+    header: ".hm-HeaderModule",
     loading: ".bl-Preloader",
     btnEncerrarApostas: ".myb-MyBetsHeader_Container > div:nth-child(1)",
     valoresApostasAtuais: ".myb-OpenBetItemInnerView_BetInformationContainer",
