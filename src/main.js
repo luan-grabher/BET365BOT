@@ -277,7 +277,7 @@ Wait.element(selectors.competitions, 10000)
 
             //A cada 2 segundos executa tudo
             setInterval(function () {
-                //console.clear();
+                console.clear();
                 console.log("Rodando programa...");
                 if (!Wait.waiting["main"]) {
                     console.log("Verificando competições...");
