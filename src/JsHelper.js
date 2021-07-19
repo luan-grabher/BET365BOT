@@ -1,3 +1,7 @@
+function addOnHead(elemento){
+    $("head").append(elemento);
+}
+
 function round(num) {
     return Math.round(num * 100) / 100
 }

@@ -17,9 +17,11 @@ const filtros = {
     ]
 };
 
-const debug = (msg)=>{
-    //Para desativar o debug apenas comente a linha de baixo
-    console.log(msg);
+//Para desativar o debug troque o 'mostrar' pata false, entao somente quem passar o mostrar como true vai mostrar
+const debug = (msg, mostrar = true)=>{    
+    if(mostrar){
+        console.log(msg);
+    }
 };
 
 const selectors = {
@@ -41,6 +43,8 @@ const selectors = {
     apostar_btn: ".qbs-BetPlacement > div",
     apostar_cancelar: ".bs-DeleteButton",
     apostar_btnFinalizar: ".qbs-QuickBetHeader_DoneButton",
+    header:".hm-HeaderModule",
+    loading: ".bl-Preloader",
     btnEncerrarApostas: ".myb-MyBetsHeader_Container > div:nth-child(1)",
     valoresApostasAtuais: ".myb-OpenBetItemInnerView_BetInformationContainer",
     lucroEsperado: ".myb-OpenBetItemInnerView_BetInformationText",

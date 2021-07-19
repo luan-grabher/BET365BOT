@@ -1,4 +1,62 @@
-/* global Wait, Config, Conta, Evento, JSHelper, selectors, apostando, conta, cfg, Apostas */
+/* global Wait, Config, Conta, Evento, JSHelper, selectors, apostando, conta, cfg, Apostas, filtros */
+
+const addBootstrap = () => {
+    return new Promise((success, error) => {
+        addOnHead("<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous'>");
+        addOnHead("<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous'></script>");
+
+        return success();
+    });
+};
+
+const mostrarFiltrosUtilizados = () => {
+    return new Promise((success, error) => {
+        //Pega header
+        Wait.element(selectors.header)
+                .then((header) => {
+
+                    //{tempoTotal: 8, tempoMaiorQue: 6, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
+
+                    //Cria uma div com as informações
+                    let div = $("<div></div").addClass("bg-light text-center h6").css("font-size","smaller");
+                    div.append($("<p></p>").text("Filtros utilizados:").addClass("fw-bold"));
+
+                    let tabela = $("<table></table>").addClass("table-dark bg-dark w-100");
+
+                    //tabela header
+                    let th = $("<tr></tr>");
+                    th.append($("<td></td>").text("Tempo total").addClass("border"));
+                    th.append($("<td></td>").text("Tempo maior que").addClass("border"));
+                    th.append($("<td></td>").text("Tempo menor que").addClass("border"));
+                    th.append($("<td></td>").text("Empate maior que").addClass("border"));
+                    th.append($("<td></td>").text("Perdendo maior que").addClass("border"));
+                    th.append($("<td></td>").text("Ganhando maior que").addClass("border"));
+                    th.append($("<td></td>").text("Diferença de gols").addClass("border"));
+                    th.append($("<td></td>").text("Nome").addClass("border"));
+
+                    tabela.append(th);
+
+                    filtros.add.forEach((filtro) => {
+                        let tr = $("<tr></tr>");
+                        tr.append($("<td></td>").text(filtro.tempoTotal).addClass("border"));
+                        tr.append($("<td></td>").text(filtro.tempoMaiorQue).addClass("border"));
+                        tr.append($("<td></td>").text(filtro.tempoMenorQue).addClass("border"));
+                        tr.append($("<td></td>").text(filtro.empate).addClass("border"));
+                        tr.append($("<td></td>").text(filtro.perdendo).addClass("border"));
+                        tr.append($("<td></td>").text(filtro.ganhandoMaiorQue).addClass("border"));
+                        tr.append($("<td></td>").text(filtro.difGols).addClass("border"));
+                        tr.append($("<td></td>").text(filtro.temNoNome).addClass("border"));
+
+                        tabela.append(tr);
+                    });
+
+                    div.append(tabela);
+                    header.append(div);
+
+                    return success();
+                });
+    });
+};
 
 function tableStyle() {
     var style = document.createElement('style');
@@ -52,7 +110,7 @@ function tabelarEvento(data, status, tempoTotal, tempo, timeApostado, timeVs, ch
 }
 ;
 /*
-
+ 
  
  function resultados() {
  let estatisticas = document.querySelector("estatisticas");
@@ -202,6 +260,21 @@ console.log("Script Iniciado!");
 Wait.element(selectors.competitions, 10000)
         //Quando encontrar as competições
         .then((competitions) => {
+            //Remove o loader
+            Wait.element(selectors.loading)
+                    .then((loading) => {
+                        loading.remove();
+                    })
+                    .catch(() => {
+                        //nao faz nada
+                    });
+
+            //Mostra os filtros utilizados
+            addBootstrap().then(() => {
+                mostrarFiltrosUtilizados();
+            });
+
+
             //A cada 2 segundos executa tudo
             setInterval(function () {
                 //console.clear();

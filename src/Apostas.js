@@ -1,4 +1,4 @@
-/* global selectors, Evento, Promise, Conta, cfg, apostando, Wait */
+/* global selectors, Evento, Promise, Conta, cfg, apostando, Wait, filtros */
 
 const Apostas = {
     todas: () => {
@@ -219,9 +219,9 @@ const Apostas = {
                         var chancesDOM = evento_DOM.find(selectors.evento_times_chances);
 
                         var chances = {
-                            um: chancesDOM.length === 3 ? chancesDOM[0] : 0,
-                            dois: chancesDOM.length === 3 ? chancesDOM[2] : 0,
-                            empate: chancesDOM.length === 3 ? chancesDOM[1] : 0
+                            um: chancesDOM.length === 3 ? Number($(chancesDOM[0]).text()) : 0,
+                            dois: chancesDOM.length === 3 ? Number($(chancesDOM[2]).text()) : 0,
+                            empate: chancesDOM.length === 3 ? Number($(chancesDOM[1]).text()) : 0
                         };
 
                         //Cria objeto
@@ -247,7 +247,7 @@ const Apostas = {
                         if (Apostas.existe(evento)) {
                             //Atualiza a aposta
                             promises.push(Apostas.atualizarEvento(evento));
-                        } else if (chances.um > 0 && Evento.validar(evento)) {
+                        } else if (chances.um > 0 && Evento.validar(evento, filtros.add)) {
                             //Tenta realizar a aposta
                             promises.push(Apostas.adicionarEvento(evento, chancesDOM));
                         }

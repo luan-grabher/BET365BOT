@@ -1,6 +1,6 @@
 const Evento = {
     validar: (evento, filtros) => {
-        return new Promisse((success, fail)=>{
+        return new Promise((success, fail) => {
             //Configura chances
             let
                     ganhando = 0,
@@ -21,7 +21,6 @@ const Evento = {
                 difGols = evento.times.um.gols - evento.times.dois.gols;
             }
 
-
             for (var f = 0; f < filtros.length; f++) {
                 let filtro = filtros[f];
 
@@ -40,7 +39,7 @@ const Evento = {
                 }
             }
 
-            return fail(); 
+            return fail();
         });
     },
     obj: (tempo, competition, time1Nome, time2Nome, time1Gols, time2Gols, time1Chance, time2Chance, empateChance) => {
