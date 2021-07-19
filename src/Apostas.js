@@ -55,7 +55,7 @@ const Apostas = {
                                     "Clicou na chance no evento: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
                                     " - T " + evento.tempo +
                                     " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
-                                    );
+                                    ,true);
                             //Espera a caixa de aposta aparecer até 5 Seg
                             Wait.element(selectors.apostar_div)
                                     .then((apostar_div) => {
@@ -63,11 +63,13 @@ const Apostas = {
                                             return  Wait.element(selectors.apostar_cancelar)
                                                     .then((apostar_cancelar) => {
                                                         apostar_cancelar.click();
+                                                        removeArrayItem(apostando, evento.times.um.nome + evento.times.dois.nome);
                                                         return success();
                                                     })
                                                     .catch(() => {
                                                         //Não apareceu o btn de cancelar, desiste de tudo, não sei o que ta acontecendo
                                                         console.log("Mano, não achei o botao de aposta depois de abrir a caixa de aposta e tbm não achei o botao de cancelar, ve o que houve ai");
+                                                        removeArrayItem(apostando, evento.times.um.nome + evento.times.dois.nome);
                                                         return success();
                                                     });
                                         };
@@ -92,7 +94,6 @@ const Apostas = {
                                                         return success();
                                                     })
                                                     .catch(() => {
-                                                        //
                                                         return esperarBtnCancelar();
                                                     });
                                         };
@@ -135,9 +136,12 @@ const Apostas = {
                                     });
                         })
                         .catch(() => {
+                            debug("A caixa de apostas não para de existir");
+                            removeArrayItem(apostando, evento.times.um.nome + evento.times.dois.nome);
                             return success();
                         });
             } else {
+                debug("Sem saldo ou já existe em apostando");
                 return success();
             }
 
@@ -148,13 +152,13 @@ const Apostas = {
             //Coloca em quem ta apostando
             if (evento.times.um.chance < evento.times.dois.chance) {
                 evento.apostado = evento.times.um.nome;
-                Apostas.apostar(evento, chancesDOM[0]).then(() => {
+                Apostas.apostar(evento, $(chancesDOM[0])).then(() => {
                     //Quando tiver apostado retorna sucesso
                     return success();
                 });
             } else {
                 evento.apostado = evento.times.dois.nome;
-                Apostas.apostar(evento, chancesDOM[2]).then(() => {
+                Apostas.apostar(evento, $(chancesDOM[2])).then(() => {
                     //Quando tiver apostado retorna sucesso
                     return success();
                 });
@@ -254,7 +258,7 @@ const Apostas = {
                                                 "Evento valido: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
                                                 " - T " + tempo +
                                                 " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
-                                                , true);
+                                                );
                                         //Tenta realizar a aposta
                                         promises.push(Apostas.adicionarEvento(evento, chancesDOM));
                                     })

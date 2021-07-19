@@ -3,7 +3,7 @@
 const Conta = {
     saldo: () => {
         let divSaldo = $(selectors.saldo);
-        let saldo = divSaldo.length ? "R$0,00" : divSaldo.text();
+        let saldo = !divSaldo.length ? "R$0,00" : divSaldo.text();
 
         return Number(saldo.replaceAll(/[^0-9,]*/gm, "").replaceAll(",", "."));
     },

@@ -18,21 +18,21 @@ const mostrarFiltrosUtilizados = () => {
                     //{tempoTotal: 8, tempoMaiorQue: 6, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
 
                     //Cria uma div com as informações
-                    let div = $("<div></div").addClass("bg-light text-center h6").css("font-size","smaller");
-                    div.append($("<p></p>").text("Filtros utilizados:").addClass("fw-bold"));
+                    let div = $("<div></div").addClass("text-center h6").css("font-size","x-small");
+                    //div.append($("<p></p>").text("Filtros utilizados:").addClass("fw-bold"));
 
-                    let tabela = $("<table></table>").addClass("table-dark bg-dark w-100");
+                    let tabela = $("<table></table>").addClass("table-dark bg-dark");
 
                     //tabela header
                     let th = $("<tr></tr>");
-                    th.append($("<td></td>").text("Tempo total").addClass("border"));
-                    th.append($("<td></td>").text("Tempo maior que").addClass("border"));
-                    th.append($("<td></td>").text("Tempo menor que").addClass("border"));
-                    th.append($("<td></td>").text("Empate maior que").addClass("border"));
-                    th.append($("<td></td>").text("Perdendo maior que").addClass("border"));
-                    th.append($("<td></td>").text("Ganhando maior que").addClass("border"));
-                    th.append($("<td></td>").text("Diferença de gols").addClass("border"));
-                    th.append($("<td></td>").text("Nome").addClass("border"));
+                    th.append($("<td></td>").text("Tempo total").addClass("border px-1"));
+                    th.append($("<td></td>").text("Tempo maior que").addClass("border px-1"));
+                    th.append($("<td></td>").text("Tempo menor que").addClass("border px-1"));
+                    th.append($("<td></td>").text("Empate maior que").addClass("border px-1"));
+                    th.append($("<td></td>").text("Perdendo maior que").addClass("border px-1"));
+                    th.append($("<td></td>").text("Ganhando maior que").addClass("border px-1"));
+                    th.append($("<td></td>").text("Diferença de gols").addClass("border px-1"));
+                    th.append($("<td></td>").text("Nome").addClass("border px-1"));
 
                     tabela.append(th);
 
