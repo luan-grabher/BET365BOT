@@ -41,11 +41,21 @@ const Apostas = {
                 //Muda o backgournd para vermelho para visualmente poder enchergar
                 chanceDOM.css("background-color", "red");
 
+                debug(
+                        "Esperando div aposta desaparecer para o evento: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                        " - T " + evento.tempo +
+                        " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
+                        );
                 Wait.elementNonExist(selectors.apostar_div, 20000)
                         .then(() => {
                             //Clica na chance para apostar
                             chanceDOM.click();
 
+                            debug(
+                                    "Clicou na chance no evento: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                                    " - T " + evento.tempo +
+                                    " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
+                                    );
                             //Espera a caixa de aposta aparecer até 5 Seg
                             Wait.element(selectors.apostar_div)
                                     .then((apostar_div) => {
@@ -66,9 +76,18 @@ const Apostas = {
                                             return Wait.element(selectors.apostar_btnFinalizar, 10000)
                                                     .then((btnFinalizar) => {
                                                         btnFinalizar.click();
+                                                        debug(
+                                                                "Clicou para finalizar o evento: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                                                                " - T " + evento.tempo +
+                                                                " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
+                                                                );
                                                         Apostas.adicionar(evento);
                                                         removeArrayItem(apostando, evento.times.um.nome + evento.times.dois.nome);
-                                                        console.log(evento);
+                                                        debug(
+                                                                "Adicionou no BD o evento: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                                                                " - T " + evento.tempo +
+                                                                " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
+                                                                );
 
                                                         return success();
                                                     })
@@ -83,10 +102,24 @@ const Apostas = {
                                                 .then((apostar_btn) => {
                                                     //Clica no botão de aposta
                                                     apostar_btn.click();
+
+                                                    debug(
+                                                            "Clicou para apostar no evento: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                                                            " - T " + evento.tempo +
+                                                            " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
+                                                            );
+
                                                     //Se aparecer outro botão de aposta clica em apostar e espera aparecer o finalizar para clicar no finalizar
                                                     Wait.element(selectors.apostar_div, 10000)
                                                             .then((apostar_btn2) => {
                                                                 apostar_btn2.click();
+
+                                                                debug(
+                                                                        "Clicou para apostar denovo no evento: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                                                                        " - T " + evento.tempo +
+                                                                        " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
+                                                                        );
+
                                                                 //Finaliza
                                                                 return esperarBtnFinalizar();
                                                             })
@@ -151,6 +184,11 @@ const Apostas = {
                     apostasFeitas[i] = ap;
 
                     Apostas.salvar(apostasFeitas);
+                    debug(
+                            "Evento atualizado no BD: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                            " - T " + evento.tempo +
+                            " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
+                            );
                     return success();
                 }
             });
@@ -160,11 +198,14 @@ const Apostas = {
         return new Promise((success, error) => {
             var promises = [];
 
+            debug("Percorrendo competições...");
             //Percorre todas competições
             competitions.each((i, competition) => {
                 competition = $(competition); //Converte para jquery
                 var competicao_nome = competition.find(selectors.competition_name).text();
                 var eventos = competition.find(selectors.competition_events);
+
+                debug("Competição '" + competicao_nome + "'");
 
                 //Percorre eventos
                 eventos.each((e, evento_DOM) => {
@@ -181,7 +222,7 @@ const Apostas = {
                             um: chancesDOM.length === 3 ? chancesDOM[0] : 0,
                             dois: chancesDOM.length === 3 ? chancesDOM[2] : 0,
                             empate: chancesDOM.length === 3 ? chancesDOM[1] : 0
-                        };                        
+                        };
 
                         //Cria objeto
                         var evento = Evento.obj(
@@ -194,6 +235,12 @@ const Apostas = {
                                 chances.um, //Chance Time 1
                                 chances.dois, //Chance Time 2
                                 chances.empate//Chance Empate
+                                );
+
+                        debug(
+                                "Evento analisado: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                                " - T " + tempo +
+                                " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
                                 );
 
                         //Se  já existir nas apostas feitas

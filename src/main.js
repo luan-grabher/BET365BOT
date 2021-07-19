@@ -183,6 +183,7 @@ const Main = function (competitions) {
                     //CODIGO DA CONTINUAÇÃO AQUI                
                     Apostas.validarEventos(competitions)
                             .then(() => {
+                                debug("Acabou de validar os eventos.");
                                 success();
                             });
                     //resultados();
@@ -210,6 +211,7 @@ Wait.element(selectors.competitions, 10000)
                     Main(competitions)
                             //Terminou a função
                             .then(() => {
+                                debug("Acabou de executar a função principal.");
                                 //Para de esperar a função main
                                 Wait.waiting["main"] = false;
                             });
