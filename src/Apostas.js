@@ -181,16 +181,16 @@ const Apostas = {
                             um: chancesDOM.length === 3 ? chancesDOM[0] : 0,
                             dois: chancesDOM.length === 3 ? chancesDOM[2] : 0,
                             empate: chancesDOM.length === 3 ? chancesDOM[1] : 0
-                        };
+                        };                        
 
                         //Cria objeto
                         var evento = Evento.obj(
                                 tempo, //tempo
                                 competicao_nome,
-                                times[0].text(), //Nome time 1
-                                times[1].text(), //Nome time 2
-                                Number(gols[0].text()), //Gols time 1
-                                Number(gols[1].text()), //Gols time 2
+                                $(times[0]).text(), //Nome time 1
+                                $(times[1]).text(), //Nome time 2
+                                Number($(gols[0]).text()), //Gols time 1
+                                Number($(gols[1]).text()), //Gols time 2
                                 chances.um, //Chance Time 1
                                 chances.dois, //Chance Time 2
                                 chances.empate//Chance Empate

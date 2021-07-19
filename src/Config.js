@@ -17,6 +17,11 @@ const filtros = {
     ]
 };
 
+const debug = (msg)=>{
+    //Para desativar o debug apenas comente a linha de baixo
+    console.log(msg);
+};
+
 const selectors = {
     competitions: ".ovm-Competition.ovm-Competition-open",
     competition_name: ".ovm-CompetitionHeader_Name",
