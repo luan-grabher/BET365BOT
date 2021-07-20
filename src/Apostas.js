@@ -208,11 +208,6 @@ const Apostas = {
                 competition = $(competition); //Converte para jquery
                 var competicao_nome = competition.find(selectors.competition_name).text();
                 var eventos = competition.find(selectors.competition_events);
-
-                //Se não estiver achando o nome da competição, recarrega a pagina
-                if(competicao_nome === ""){
-                    document.location.reload();
-                }
                 
                 debug("Competição '" + competicao_nome + "'");
 
