@@ -18,7 +18,7 @@ const mostrarFiltrosUtilizados = () => {
                     //{tempoTotal: 8, tempoMaiorQue: 6, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
 
                     //Cria uma div com as informações
-                    let div = $("<div></div").addClass("text-center h6").css("font-size","x-small");
+                    let div = $("<div></div").addClass("text-center h6").css("font-size", "x-small");
                     //div.append($("<p></p>").text("Filtros utilizados:").addClass("fw-bold"));
 
                     let tabela = $("<table></table>").addClass("table-dark bg-dark");
@@ -257,9 +257,9 @@ console.clear();
 console.log("Script Iniciado!");
 
 //Espera até 10s pelas competições
-Wait.element(selectors.competitions, 10000)
+Wait.element(selectors.competitions, 5000)
         //Quando encontrar as competições
-        .then((competitions) => {
+        .then((competitionsToStart) => {
             //Remove o loader
             Wait.element(selectors.loading)
                     .then((loading) => {
@@ -281,13 +281,22 @@ Wait.element(selectors.competitions, 10000)
                 console.log("Rodando programa...");
                 if (!Wait.waiting["main"]) {
                     console.log("Verificando competições...");
-                    Main(competitions)
-                            //Terminou a função
-                            .then(() => {
-                                debug("Acabou de executar a função principal.");
-                                //Para de esperar a função main
-                                Wait.waiting["main"] = false;
+                    //Pega competições
+                    Wait.element(selectors.competitions, 2000)
+                            .then((competitions) => {
+                                Main(competitions)
+                                        //Terminou a função
+                                        .then(() => {
+                                            debug("Acabou de executar a função principal.");
+                                            //Para de esperar a função main
+                                            Wait.waiting["main"] = false;
+                                        });
+                            })
+                            .catch(() => {
+                                //Se não achar as competições recarrega a pagina
+                                document.location.reload();
                             });
+
                 }
             }, 2000);
         });
