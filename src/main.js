@@ -294,7 +294,7 @@ Wait.element(selectors.competitions, 5000)
                             })
                             .catch(() => {
                                 //Se não achar as competições recarrega a pagina
-                                document.location.reload();
+                                document.location.reload(true);
                             });
 
                 }
