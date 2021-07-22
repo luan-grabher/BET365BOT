@@ -1,14 +1,5 @@
 /* global Wait, Config, Conta, Evento, JSHelper, selectors, apostando, conta, cfg, Apostas, filtros */
 
-const addBootstrap = () => {
-    return new Promise((success, error) => {
-        addOnHead("<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous'>");
-        addOnHead("<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous'></script>");
-
-        return success();
-    });
-};
-
 const mostrarFiltrosUtilizados = () => {
     return new Promise((success, error) => {
         //Pega header
@@ -55,40 +46,6 @@ const mostrarFiltrosUtilizados = () => {
                     return success();
                 });
     });
-};
-
-function tableStyle() {
-    var style = document.createElement('style');
-    style.type = 'text/css';
-
-    let text = ".tabela { \n" +
-            "  font-family: Arial, Helvetica, sans-serif; " +
-            "  border-collapse: collapse; " +
-            "  width: 100%; " +
-            "  text-align: center;" +
-            "  font-size: 80%" +
-            "} " +
-            " " +
-            ".tabela td, .tabela th { " +
-            "  border: 1px solid #ddd; " +
-            "  padding: 2px; " +
-            "} " +
-            ".tabela tr:nth-child(even){background-color: #f2f2f2;} " +
-            ".tabela tr:hover {background-color: #ddd;} ";
-    style.innerHTML = text;
-    return style;
-}
-
-const table = {
-    tb: function (text) {
-        return "<table class='tabela'>" + text + "</table>";
-    },
-    tr: function (text) {
-        return "<tr>" + text + "</tr>";
-    },
-    td: function (text) {
-        return "<td>" + text + "</td>";
-    }
 };
 
 
