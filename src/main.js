@@ -231,28 +231,23 @@ const Main = (competitions) => {
         //Define que está esperando a função terminar
         Wait.waiting["main"] = true;
 
-        //Login
-        Conta.login()
+        //Atualiza saldo
+        Conta.atualizarSaldo()
                 .then(() => {
-                    //NÃO FAZ NADA POIS A PAGE VAI RECARREGAR
-                    console.log("Na teoria é para recarregar a página agora.");
-                })
-                .catch(() => {
-                    //Atualiza saldo
-                    Conta.atualizarSaldo()
+                    //CODIGO DA CONTINUAÇÃO AQUI                
+                    Apostas.validarEventos(competitions)
                             .then(() => {
-                                //CODIGO DA CONTINUAÇÃO AQUI                
-                                Apostas.validarEventos(competitions)
-                                        .then(() => {
-                                            debug("Acabou de validar os eventos.");
-                                            return success();
-                                        });
+                                debug("Acabou de validar os eventos.");
+                                return success();
                             })
                             .catch(() => {
-                                //Se não consegir atualizar o saldo, recarrega a pagina
-                                document.location.reload(true);
+                                //Se der algum erro na validação de eventos
                                 return error();
                             });
+                })
+                .catch(() => {
+                    //Se não consegir atualizar o saldo, recarrega a pagina                                
+                    return error();
                 });
     });
 };
@@ -283,28 +278,40 @@ Wait.element(selectors.competitions, 5000)
             });
 
 
-            //A cada 2 segundos executa tudo
-            setInterval(function () {
-                console.clear();
-                console.log("Rodando programa...");
-                if (!Wait.waiting["main"]) {
-                    console.log("Verificando competições...");
-                    //Pega competições
-                    Wait.element(selectors.competitions, 2000)
-                            .then((competitions) => {
-                                Main(competitions)
-                                        //Terminou a função
-                                        .then(() => {
-                                            debug("Acabou de executar a função principal.");
-                                            //Para de esperar a função main
-                                            Wait.waiting["main"] = false;
+            //Tenta fazer o login
+            Conta.login()
+                    .then(() => {
+                        //NÃO FAZ NADA POIS A PAGE VAI RECARREGAR
+                        console.log("Na teoria é para recarregar a página agora.");
+                    })
+                    .catch(() => {
+                        //A cada 2 segundos executa tudo
+                        setInterval(function () {
+                            console.clear();
+                            console.log("Rodando programa...");
+                            if (!Wait.waiting["main"]) {
+                                console.log("Verificando competições...");
+                                //Pega competições
+                                Wait.element(selectors.competitions, 2000)
+                                        .then((competitions) => {
+                                            Main(competitions)
+                                                    //Terminou a função
+                                                    .then(() => {
+                                                        debug("Acabou de executar a função principal.");
+                                                        //Para de esperar a função main
+                                                        Wait.waiting["main"] = false;
+                                                    })
+                                                    .catch(() => {
+                                                        //Se der algum erro na função principal recarrega a pagina
+                                                        document.location.reload(true);
+                                                    });
+                                        })
+                                        .catch(() => {
+                                            //Se não achar as competições recarrega a pagina
+                                            document.location.reload(true);
                                         });
-                            })
-                            .catch(() => {
-                                //Se não achar as competições recarrega a pagina
-                                document.location.reload(true);
-                            });
 
-                }
-            }, 2000);
+                            }
+                        }, 2000);
+                    });
         });
