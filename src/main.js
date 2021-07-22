@@ -226,13 +226,13 @@ function tabelarEvento(data, status, tempoTotal, tempo, timeApostado, timeVs, ch
  estatisticas.append(newHtml);
  }*/
 
-const Main = function (competitions) {
+const Main = (competitions) => {
     return new Promise((success, error) => {
         //Define que está esperando a função terminar
         Wait.waiting["main"] = true;
 
         //Login
-        Conta.login
+        Conta.login()
                 .then(() => {
                     //NÃO FAZ NADA POIS A PAGE VAI RECARREGAR
                     console.log("Na teoria é para recarregar a página agora.");
@@ -245,7 +245,7 @@ const Main = function (competitions) {
                                 Apostas.validarEventos(competitions)
                                         .then(() => {
                                             debug("Acabou de validar os eventos.");
-                                            success();
+                                            return success();
                                         });
                             })
                             .catch(() => {
@@ -255,7 +255,7 @@ const Main = function (competitions) {
                             });
                 });
     });
-}
+};
 
 /* *************
  * INICIO DE TUDO

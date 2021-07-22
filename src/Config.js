@@ -42,6 +42,7 @@ const selectors = {
     login_Password: ".lms-StandardLogin_Password",
     conta_img: ".hm-MainHeaderMembersWide_MembersMenuIcon",
     conta_saldo_atualizar: ".hm-MainHeaderMembersWide_MembersMenuIcon",
+    telaPrincipal: ".ovm-OverviewView",
     verificacaoDeConta: "#remindLater",
     apostar_div: ".qbs-StakeBox",
     apostar_btn: ".qbs-BetPlacement > div",
