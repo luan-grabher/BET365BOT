@@ -1,4 +1,4 @@
-/* global Wait, selectors, filtros, Apostas, Evento, cfg */
+/* global Wait, selectors, filtros, Apostas, Evento, cfg, Promise */
 
 const Info = {
     /*Mostra os filtros que estão sendo utilizados para apostar*/
@@ -74,84 +74,98 @@ const Info = {
 
             tabela.append(th);
 
+            let promises = [];
+            let promise = (aposta) => {
+                return new Promise((suc, err) => {
+                    //Se o dia não for igual a hoje ou o dia igual a hoje mas a ultima atualização já faz mais de 2 minutos
+                    if (aposta.data !== getDate() || (aposta.data === getDate() && (getMinutes() - aposta.ultimoPlacar.att) > 2)) {
+
+                        //Se for um filtro válido para as estatisticas
+                        Evento.validar(aposta, filtros.view)
+                                .then(() => {
+                                    //Predefine as informações da aposta
+                                    let
+                                            timeApostado = aposta.times.um,
+                                            timeVs = aposta.times.dois,
+                                            chanceEmpate = aposta.times.empate.chance,
+                                            golsFinalApostado = aposta.ultimoPlacar.time1,
+                                            golsFinalVS = aposta.ultimoPlacar.time2,
+                                            status = "VITORIA";
+
+                                    //Caso o time apostado for o 2, ai altera
+                                    if (aposta.apostado === aposta.times.dois.nome) {
+                                        timeApostado = aposta.times.dois;
+                                        timeVs = aposta.times.um;
+                                        golsFinalApostado = aposta.ultimoPlacar.time2;
+                                        golsFinalVS = aposta.ultimoPlacar.time1;
+                                    }
+
+                                    //Se for vitoria (gols apostado + gols adversario)
+                                    if (golsFinalApostado > golsFinalVS) {
+                                        totais.vitorias++;
+                                        totais.ganhos += round((cfg.valorAposta * timeApostado.chance) - cfg.valorAposta);
+                                    } else {
+                                        totais.derrotas++;
+                                        totais.perdas += round(cfg.valorAposta);
+
+                                        status = "DERROTA";
+                                    }
+
+                                    let tr = $("<tr></tr>");
+                                    tr.append($("<td></td>").text(aposta.data).addClass("border"));
+                                    tr.append($("<td></td>").text(status).addClass("border"));
+                                    tr.append($("<td></td>").text(aposta.tempoTotal).addClass("border"));
+                                    tr.append($("<td></td>").text(aposta.tempo).addClass("border"));
+                                    tr.append($("<td></td>").text(timeApostado.nome).addClass("border"));
+                                    tr.append($("<td></td>").text(timeVs.nome).addClass("border"));
+                                    tr.append($("<td></td>").text(timeApostado.chance).addClass("border"));
+                                    tr.append($("<td></td>").text(chanceEmpate).addClass("border"));
+                                    tr.append($("<td></td>").text(timeVs.chance).addClass("border"));
+                                    tr.append($("<td></td>").text(timeApostado.gols + " X " + timeVs.gols).addClass("border"));
+                                    tr.append($("<td></td>").text(timeApostado.gols - timeVs.gols).addClass("border"));
+                                    tr.append($("<td></td>").text(golsFinalApostado + " X " + golsFinalVS).addClass("border"));
+
+                                    tabela.append(tr);
+                                    return suc();
+                                })
+                                .catch(() => {
+                                    return suc();
+                                });
+                    } else {
+                        return suc();
+                    }
+                });
+            };
+
+
             apostasFeitas.forEach((aposta) => {
-                //Se o dia não for igual a hoje ou o dia igual a hoje mas a ultima atualização já faz mais de 2 minutos
-                if (aposta.data !== getDate() || (aposta.data === getDate() && (getMinutes() - aposta.ultimoPlacar.att) > 2)) {
+                promises.push(promise(aposta));
 
-                    //Se for um filtro válido para as estatisticas
-                    Evento.validar(aposta, filtros.view)
-                            .then(() => {
-                                //Predefine as informações da aposta
-                                let
-                                        timeApostado = aposta.times.um,
-                                        timeVs = aposta.times.dois,
-                                        chanceEmpate = aposta.times.empate.chance,
-                                        golsFinalApostado = aposta.ultimoPlacar.time1,
-                                        golsFinalVS = aposta.ultimoPlacar.time2,
-                                        status = "VITORIA";
-
-                                //Caso o time apostado for o 2, ai altera
-                                if (aposta.apostado === aposta.times.dois.nome) {
-                                    timeApostado = aposta.times.dois;
-                                    timeVs = aposta.times.um;
-                                    golsFinalApostado = aposta.ultimoPlacar.time2;
-                                    golsFinalVS = aposta.ultimoPlacar.time1;
-                                }
-
-                                //Se for vitoria (gols apostado + gols adversario)
-                                if (golsFinalApostado > golsFinalVS) {
-                                    totais.vitorias++;
-                                    totais.ganhos += round((cfg.valorAposta * timeApostado.chance) - cfg.valorAposta);
-                                } else {
-                                    totais.derrotas++;
-                                    totais.perdas += round(cfg.valorAposta);
-
-                                    status = "DERROTA";
-                                }
-
-                                let tr = $("<tr></tr>");
-                                tr.append($("<tr></tr>").text(aposta.data).addClass("border"));
-                                tr.append($("<tr></tr>").text(status).addClass("border"));
-                                tr.append($("<tr></tr>").text(aposta.tempoTotal).addClass("border"));
-                                tr.append($("<tr></tr>").text(aposta.tempo).addClass("border"));
-                                tr.append($("<tr></tr>").text(timeApostado.nome).addClass("border"));
-                                tr.append($("<tr></tr>").text(timeVs.nome).addClass("border"));
-                                tr.append($("<tr></tr>").text(timeApostado.chance).addClass("border"));
-                                tr.append($("<tr></tr>").text(chanceEmpate).addClass("border"));
-                                tr.append($("<tr></tr>").text(timeVs.chance).addClass("border"));
-                                tr.append($("<tr></tr>").text(timeApostado.gols + " X " + timeVs.gols).addClass("border"));
-                                tr.append($("<tr></tr>").text(timeApostado.gols - timeVs.gols).addClass("border"));
-                                tr.append($("<tr></tr>").text(golsFinalApostado + " X " + golsFinalVS).addClass("border"));
-
-                                tabela.append(tr);
-                            })
-                            .catch(() => {
-                                //nada
-                            });
-                }
             });
 
-            //Coloca o lucro
-            totais.lucro = round(totais.ganhos - totais.perdas);
+            Promise.all(promises).then(() => {
+                //Coloca o lucro
+                totais.lucro = round(totais.ganhos - totais.perdas);
 
-            //informações
-            let infos = $("<div></div>").css("font-size","x-small");
-            
-            infos.append($("<p></p>").append($("<b></b>").text("Ultima atualização: ")).text(getDate() + " " + getHours()));
-            infos.append($("<p></p>").append($("<b></b>").text("Vitórias: ")).text(totais.vitorias));
-            infos.append($("<p></p>").append($("<b></b>").text("Derrotas: ")).text(totais.derrotas));
-            infos.append($("<p></p>").append($("<b></b>").text("Ganhos: ")).text(totais.ganhos));
-            infos.append($("<p></p>").append($("<b></b>").text("Perdas: ")).text(totais.perdas));
-            infos.append($("<p></p>").append($("<b></b>").text("Liquido: ")).text(totais.lucro));            
+                //informações
+                let infos = $("<div></div>").css("font-size", "x-small");
 
-            //Pega a div de informações de atrasos de transmissões que vai colocar as estatisticas
-            let div = $(selectors.infoAtrasos);
-            div.removeClass("fm-InPlayNotice_WidthState2"); //remove essa clasee que eu nao sei pra que serve
-            
-            div.append(infos);
-            div.append(tabela);
-            
-            return success();
+                infos.append($("<p></p>").append($("<b></b>").text("Ultima atualização: ")).append(getDate() + " " + getHours()));
+                infos.append($("<p></p>").append($("<b></b>").text("Vitórias: ")).append(totais.vitorias));
+                infos.append($("<p></p>").append($("<b></b>").text("Derrotas: ")).append(totais.derrotas));
+                infos.append($("<p></p>").append($("<b></b>").text("Ganhos: ")).append(totais.ganhos));
+                infos.append($("<p></p>").append($("<b></b>").text("Perdas: ")).append(totais.perdas));
+                infos.append($("<p></p>").append($("<b></b>").text("Liquido: ")).append(totais.lucro));
+
+                //Pega a div de informações de atrasos de transmissões que vai colocar as estatisticas
+                let div = $(selectors.infoAtrasos);
+                div.removeClass("fm-InPlayNotice_WidthState2"); //remove essa clasee que eu nao sei pra que serve
+
+                div.html(infos);
+                div.append(tabela);
+
+                return success();
+            });
         });
     }
 };

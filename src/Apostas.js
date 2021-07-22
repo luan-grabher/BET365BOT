@@ -21,7 +21,8 @@ const Apostas = {
             if (
                     ap.data === evento.data &&
                     ap.times.um.nome === evento.times.um.nome &&
-                    ap.times.dois.nome === evento.times.dois.nome) {
+                    ap.times.dois.nome === evento.times.dois.nome &&
+                    (getMinutes() - evento.ultimoPlacar.att) < 7) {
                 //encontrou a aposta e define como o encontrado
                 return true;
             }
@@ -176,7 +177,8 @@ const Apostas = {
                 if (
                         ap.data === evento.data &&
                         ap.times.um.nome === evento.times.um.nome &&
-                        ap.times.dois.nome === evento.times.dois.nome) {
+                        ap.times.dois.nome === evento.times.dois.nome &&
+                        (getMinutes() - ap.ultimoPlacar.att) < 7) {
 
                     //Atualiza placar				
                     ap.ultimoPlacar.tempo = evento.tempo;

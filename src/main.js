@@ -1,4 +1,4 @@
-/* global Wait, Config, Conta, Evento, JSHelper, selectors, apostando, conta, cfg, Apostas, filtros, Info */
+/* global Wait, Config, Conta, Evento, JSHelper, selectors, apostando, conta, cfg, Apostas, filtros, Info, addBootstrap */
 
 const Main = (competitions) => {
     return new Promise((success, error) => {
@@ -8,14 +8,7 @@ const Main = (competitions) => {
         //Atualiza saldo
         Conta.atualizarSaldo()
                 .then(() => {
-                    Info.mostrarResultados()
-                            .then(() => {
-
-                            })
-                            .catch(() => {
-
-                            });
-
+                    Info.mostrarResultados();
                     Apostas.validarEventos(competitions)
                             .then(() => {
                                 debug("Acabou de validar os eventos.");
@@ -54,8 +47,8 @@ Wait.element(selectors.competitions, 5000)
                     });
 
             //Mostra os filtros utilizados
-            Info.addBootstrap().then(() => {
-                mostrarFiltrosUtilizados();
+            addBootstrap().then(() => {
+                Info.mostrarFiltrosUtilizados();
             });
 
 
