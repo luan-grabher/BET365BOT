@@ -12,13 +12,13 @@ const addBootstrap = () => {
 const mostrarFiltrosUtilizados = () => {
     return new Promise((success, error) => {
         //Pega header
-        Wait.element(selectors.header)
-                .then((header) => {
+        Wait.element(selectors.jogosInstantaneos)
+                .then((jogosInstantaneos) => {
 
                     //{tempoTotal: 8, tempoMaiorQue: 6, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
 
                     //Cria uma div com as informações
-                    let div = $("<div></div").addClass("text-center h6").css("font-size", "x-small");
+                    let div = $(jogosInstantaneos).addClass("text-center h6").css("font-size", "x-small");
                     //div.append($("<p></p>").text("Filtros utilizados:").addClass("fw-bold"));
 
                     let tabela = $("<table></table>").addClass("table-dark bg-dark");
@@ -50,8 +50,7 @@ const mostrarFiltrosUtilizados = () => {
                         tabela.append(tr);
                     });
 
-                    div.append(tabela);
-                    header.append(div);
+                    div.html(tabela);
 
                     return success();
                 });

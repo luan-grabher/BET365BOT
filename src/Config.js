@@ -43,6 +43,7 @@ const selectors = {
     conta_img: ".hm-MainHeaderMembersWide_MembersMenuIcon",
     conta_saldo_atualizar: ".hm-MainHeaderMembersWide_MembersMenuIcon",
     telaPrincipal: ".ovm-OverviewView",
+    jogosInstantaneos: ".igc-InstantGamesFooter",
     verificacaoDeConta: "#remindLater",
     apostar_div: ".qbs-StakeBox",
     apostar_btn: ".qbs-BetPlacement > div",
