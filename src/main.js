@@ -8,7 +8,14 @@ const Main = (competitions) => {
         //Atualiza saldo
         Conta.atualizarSaldo()
                 .then(() => {
-                    //CODIGO DA CONTINUAÇÃO AQUI                
+                    Info.mostrarResultados()
+                            .then(() => {
+
+                            })
+                            .catch(() => {
+
+                            });
+
                     Apostas.validarEventos(competitions)
                             .then(() => {
                                 debug("Acabou de validar os eventos.");

@@ -150,6 +150,8 @@ const Info = {
             
             div.append(infos);
             div.append(tabela);
+            
+            return success();
         });
     }
 };
