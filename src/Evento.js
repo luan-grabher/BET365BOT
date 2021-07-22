@@ -37,7 +37,7 @@ const Evento = {
                         (filtro.difGols === null || difGols >= filtro.difGols) &&
                         (filtro.temNoNome === null || (evento.times.um.nome.includes(filtro.temNoNome) && evento.times.dois.nome.includes(filtro.temNoNome)))
                         ) {
-                    debug(filtro, true);
+                    debug(filtro, false);
                     
                     return success();
                 }
