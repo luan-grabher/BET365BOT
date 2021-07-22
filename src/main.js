@@ -238,13 +238,21 @@ const Main = function (competitions) {
                     console.log("Na teoria é para recarregar a página agora.");
                 })
                 .catch(() => {
-                    //CODIGO DA CONTINUAÇÃO AQUI                
-                    Apostas.validarEventos(competitions)
+                    //Atualiza saldo
+                    Conta.atualizarSaldo()
                             .then(() => {
-                                debug("Acabou de validar os eventos.");
-                                success();
+                                //CODIGO DA CONTINUAÇÃO AQUI                
+                                Apostas.validarEventos(competitions)
+                                        .then(() => {
+                                            debug("Acabou de validar os eventos.");
+                                            success();
+                                        });
+                            })
+                            .catch(() => {
+                                //Se não consegir atualizar o saldo, recarrega a pagina
+                                document.location.reload(true);
+                                return error();
                             });
-                    //resultados();
                 });
     });
 }

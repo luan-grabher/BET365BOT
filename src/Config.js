@@ -2,7 +2,7 @@
 var apostando = [];
 
 const cfg = {
-    valorAposta: 1
+    valorAposta: 5
 };
 
 const filtros = {
@@ -40,6 +40,8 @@ const selectors = {
     login_BtnModal: ".lms-StandardLogin_LoginButton",
     login_User: ".lms-StandardLogin_Username",
     login_Password: ".lms-StandardLogin_Password",
+    conta_img: ".hm-MainHeaderMembersWide_MembersMenuIcon",
+    conta_saldo_atualizar: ".hm-MainHeaderMembersWide_MembersMenuIcon",
     verificacaoDeConta: "#remindLater",
     apostar_div: ".qbs-StakeBox",
     apostar_btn: ".qbs-BetPlacement > div",

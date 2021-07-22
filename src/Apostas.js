@@ -242,7 +242,7 @@ const Apostas = {
                                 );
 
                         debug(
-                                "Evento analisado: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
+                                "::::Evento analisado: " + evento.times.um.nome + " VS " + evento.times.dois.nome +
                                 " - T " + tempo +
                                 " - G " + evento.times.um.gols + "X" + evento.times.dois.gols
                                 );
