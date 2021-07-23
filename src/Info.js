@@ -153,7 +153,7 @@ const Info = {
                 infos.append($("<p></p>").append($("<b></b>").text("Ultima atualização: ")).append(getDate() + " " + getHours()));
                 infos.append($("<p></p>").append($("<b></b>").text("Vitórias: ")).append(totais.vitorias));
                 infos.append($("<p></p>").append($("<b></b>").text("Derrotas: ")).append(totais.derrotas));
-                infos.append($("<p></p>").append($("<b></b>").text("Ganhos: ")).append(totais.ganhos));
+                infos.append($("<p></p>").append($("<b></b>").text("Ganhos: ")).append(round(totais.ganhos)));
                 infos.append($("<p></p>").append($("<b></b>").text("Perdas: ")).append(totais.perdas));
                 infos.append($("<p></p>").append($("<b></b>").text("Liquido: ")).append(totais.lucro));
 

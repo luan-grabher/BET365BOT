@@ -10,7 +10,7 @@ const filtros = {
         {tempoTotal: 8, tempoMaiorQue: 5, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 3, temNoNome: "Esports"},
         {tempoTotal: 8, tempoMaiorQue: 6, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
         {tempoTotal: 10, tempoMaiorQue: 6, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 3, temNoNome: "Esports"},
-        {tempoTotal: 10, tempoMaiorQue: 7, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
+        {tempoTotal: 10, tempoMaiorQue: 8, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
         {tempoTotal: 12, tempoMaiorQue: 8, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
         {tempoTotal: 90, tempoMaiorQue: 85, tempoMenorQue: null, empate: 7.9, perdendo: 19, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: null}
     ],

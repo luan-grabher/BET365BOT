@@ -4,6 +4,7 @@ const Main = (competitions) => {
     return new Promise((success, error) => {
         //Define que está esperando a função terminar
         Wait.waiting["main"] = true;
+        localStorage.setItem("ultimaAtt", new Date().getTime());
 
         //Atualiza saldo
         Conta.atualizarSaldo()
@@ -32,6 +33,20 @@ const Main = (competitions) => {
 
 console.clear();
 console.log("Script Iniciado!");
+
+//A cada 2 minutos verifica se o codigo está rodando
+setInterval(()=>{
+    let agora = new Date().getTime();
+    
+    let ultimaAtt = localStorage.getItem("ultimaAtt") || 0;
+    ultimaAtt = Number(ultimaAtt);
+    
+    //Se fizer mais de 2 minutos desde a ultima att
+    if(agora-ultimaAtt > 120000){
+        //recarrega a pagina
+        document.location.reload(true);
+    }
+},120000);
 
 //Espera até 10s pelas competições
 Wait.element(selectors.competitions, 5000)
@@ -76,11 +91,13 @@ Wait.element(selectors.competitions, 5000)
                                                         Wait.waiting["main"] = false;
                                                     })
                                                     .catch(() => {
+                                                        Wait.waiting["main"] = false;
                                                         //Se der algum erro na função principal recarrega a pagina
                                                         document.location.reload(true);
                                                     });
                                         })
                                         .catch(() => {
+                                            Wait.waiting["main"] = false;
                                             //Se não achar as competições recarrega a pagina
                                             document.location.reload(true);
                                         });
