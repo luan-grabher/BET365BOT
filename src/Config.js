@@ -8,7 +8,7 @@ const cfg = {
 const filtros = {
     add: [
         {tempoTotal: 8, tempoMaiorQue: 5, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 3, temNoNome: "Esports"},
-        {tempoTotal: 8, tempoMaiorQue: 6, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
+        {tempoTotal: 8, tempoMaiorQue: 6.39, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
         {tempoTotal: 10, tempoMaiorQue: 6, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 3, temNoNome: "Esports"},
         {tempoTotal: 10, tempoMaiorQue: 8, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},
         {tempoTotal: 12, tempoMaiorQue: 8, tempoMenorQue: null, empate: 19, perdendo: 9, ganhandoMaiorQue: 1.01, difGols: 2, temNoNome: "Esports"},

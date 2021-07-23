@@ -9,6 +9,7 @@ const Main = (competitions) => {
         //Atualiza saldo
         Conta.atualizarSaldo()
                 .then(() => {
+                    debug("Saldo atualizado.");
                     Info.mostrarResultados();
                     Apostas.validarEventos(competitions)
                             .then(() => {
