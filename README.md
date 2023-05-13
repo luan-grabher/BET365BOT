@@ -1,2 +1,2 @@
 # BET365BOT
-Bet365 robo que aposta, vou escrever em PORTUGUES TO NEM AI.
+Robô que analisa e aposta automaticmante em partidas de futebol na Bet365. Caso deslogue o robô loga novamente.
